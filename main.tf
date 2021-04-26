@@ -12,13 +12,8 @@ provider "azurerm" {
 }
 
 locals {
-  account_tier             = (var.account_kind == "FileStorage" ? "Premium" : split("_", var.sku)[0])
-  account_replication_type = (local.account_tier == "Premium" ? "LRS" : split("_", var.sku)[1])
-  resource_group_name = element(
-  coalescelist(azurerm_resource_group.rg.*.name, [var.resource_group_name]), 0)
-  location = element(
-  coalescelist(azurerm_resource_group.rg.*.location, [var.location]), 0)
-  if_static_website_enabled = var.enable_static_website ? [{}] : []
+  resource_group_name = element( coalescelist(azurerm_resource_group.rg.*.name, [var.resource_group_name]), 0)
+  location = element(coalescelist(azurerm_resource_group.rg.*.location, [var.location]), 0)
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -35,8 +30,8 @@ resource "azurerm_storage_account" "storeacc" {
   resource_group_name       = local.resource_group_name
   location                  = local.location
   account_kind              = var.account_kind
-  account_tier              = local.account_tier
-  account_replication_type  = local.account_replication_type
+  account_tier              = var.account_tier
+  account_replication_type  = var.account_replication_type
   enable_https_traffic_only = var.enable_https_traffic
 
   static_website {

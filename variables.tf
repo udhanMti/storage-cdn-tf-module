@@ -28,9 +28,12 @@ variable "sku" {
   default     = "Standard_RAGRS"
 }
 
-variable "access_tier" {
-  description = "The access tier of the storage account."
-  default     = "Hot"
+variable "account_tier" {
+  default = "Standard"
+}
+
+variable "account_replication_type" {
+  default = "RAGRS"
 }
 
 variable "enable_https_traffic" {
